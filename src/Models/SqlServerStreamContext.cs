@@ -9,26 +9,32 @@ public class SqlServerStreamContext : IStreamContext, IStreamContextWriter
     /// Sql Server connection string.
     /// </summary>
     public string ConnectionString { get; set; }
+    
     /// <summary>
     /// Table schema.
     /// </summary>
     public string Schema { get; set; }
+    
     /// <summary>
     /// Table name.
     /// </summary>
     public string Table { get; set; }
+    
     /// <summary>
     /// Number of rows per parquet rowgroup.
     /// </summary>
     public int RowsPerGroup { get; set; }
+    
     /// <summary>
     /// Max time to wait for rowsPerGroup to accumulate.
     /// </summary>
     public TimeSpan GroupingInterval { get; set; }
+    
     /// <summary>
     /// Number of row groups per file.
     /// </summary>
     public int GroupsPerFile { get; set; }
+    
     /// <summary>
     /// Data location for parquet files.
     /// </summary>
