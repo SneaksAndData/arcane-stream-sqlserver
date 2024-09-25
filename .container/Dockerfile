@@ -16,7 +16,7 @@ RUN dotnet_arch=$(test "$TARGETARCH" = "amd64" && echo "x64" || echo "$TARGETARC
 # Copy everything else and build
 COPY src/. ./
 RUN dotnet_arch=$(test "$TARGETARCH" = "amd64" && echo "x64" || echo "$TARGETARCH") && \
-    dotnet publish "Arcane.Stream.SqlServerChangeTracking.csproj" -c Release -o out --runtime "linux-$dotnet_arch"
+    dotnet publish "Arcane.Stream.SqlServer.csproj" -c Release -o out --runtime "linux-$dotnet_arch"
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim
