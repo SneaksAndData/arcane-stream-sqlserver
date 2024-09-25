@@ -27,6 +27,13 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Generage image reference based on image repository and tag
+*/}}
+{{- define "app.image" -}}
+{{- printf "%s:%s" .Values.image.repository  (default (printf "%s" .Chart.AppVersion) .Values.image.tag) }}
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "app.labels" -}}
@@ -54,5 +61,67 @@ Create the name of the service account to use
 {{- default (include "app.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate the CR viewer cluster role name
+*/}}
+{{- define "app.clusterRole.sqlServerStreamViewer" -}}
+{{- if .Values.rbac.clusterRole.sqlServerStreamViewer.nameOverride }}
+{{- .Values.rbac.clusterRole.sqlServerStreamViewer.nameOverride }}
+{{- else }}
+{{- printf "%s-viewer" (include "app.fullname" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate the CR editor cluster role name
+*/}}
+{{- define "app.clusterRole.sqlServerStreamEditor" -}}
+{{- if .Values.rbac.clusterRole.sqlServerStreamEditor.nameOverride }}
+{{- .Values.rbac.clusterRole.sqlServerStreamEditor.nameOverride }}
+{{- else }}
+{{- printf "%s-editor" (include "app.fullname" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Stream class labels
+*/}}
+{{- define "streamclass.labels" -}}
+helm.sh/chart: {{ include "app.chart" . }}
+{{ include "app.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.additionalLabels }}
+{{ toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Job template standard labels
+*/}}
+{{- define "job.labels" -}}
+helm.sh/chart: {{ include "app.chart" . }}
+{{ include "app.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+{{- with .Values.jobTemplateSettings.additionalLabels }}
+{{ toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate the job editor cluster role name
+*/}}
+{{- define "app.clusterRole.jobEditor" -}}
+{{- if .Values.rbac.clusterRole.jobEditor.nameOverride }}
+{{- .Values.rbac.clusterRole.jobEditor.nameOverride }}
+{{- else }}
+{{- printf "%s-job-editor" (include "app.fullname" .) }}
 {{- end }}
 {{- end }}
