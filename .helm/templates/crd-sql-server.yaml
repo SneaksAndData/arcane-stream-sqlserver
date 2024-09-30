@@ -95,7 +95,7 @@ spec:
                   description: Number of seconds to wait for result before sql commands should time out.
                 changeCaptureIntervalSeconds:
                   type: integer
-                  description: How long to wait before polling for next result set. Can be from 1 to 60 seconds.
+                  description: How long to wait before polling for next result set. Can be from 1 to 1000000 seconds.
                   minimum: 1
                   maximum: 1000000
             status:
