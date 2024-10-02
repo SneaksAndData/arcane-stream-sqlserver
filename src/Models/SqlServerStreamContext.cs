@@ -1,4 +1,6 @@
 using System;
+using System.Text.Json.Serialization;
+using Arcane.Framework.Configuration;
 using Arcane.Framework.Services.Base;
 
 namespace Arcane.Stream.SqlServer.Models;
@@ -28,7 +30,15 @@ public class SqlServerStreamContext : IStreamContext, IStreamContextWriter
     /// <summary>
     /// Max time to wait for rowsPerGroup to accumulate.
     /// </summary>
+    [JsonConverter(typeof(SecondsToTimeSpanConverter))]
+    [JsonPropertyName("groupingIntervalSeconds")]
     public TimeSpan GroupingInterval { get; set; }
+    
+    /// <summary>
+    /// How long to wait before polling for next result set.
+    /// </summary>
+    [JsonPropertyName("changeCaptureIntervalSeconds")]
+    public int ChangeCaptureIntervalSeconds { get; set; }
     
     /// <summary>
     /// Number of row groups per file.
