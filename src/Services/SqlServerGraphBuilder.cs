@@ -34,6 +34,7 @@ public class SqlServerGraphBuilder(
             var source = SqlServerSource.Create(context.ConnectionString,
                 context.Schema,
                 context.Table,
+                TimeSpan.FromSeconds(context.ChangeCaptureIntervalSeconds),
                 context.CommandTimeout);
 
             var schema = source.GetParquetSchema();
