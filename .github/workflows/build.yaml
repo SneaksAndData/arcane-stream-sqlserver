@@ -21,9 +21,9 @@ jobs:
       pull-requests: write # required for dependabot PRs
       contents: read       # required for dependabot PRs
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4.0.1
+        uses: actions/setup-dotnet@v6.0.0
         with:
           dotnet-version: 6.0.x
       - name: Restore dependencies
@@ -54,24 +54,24 @@ jobs:
       packages: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@v4.6.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get project version
-        uses: SneaksAndData/github-actions/generate_version@v0.1.9
+        uses: SneaksAndData/github-actions/generate_version@v0.1.12
         id: version
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
@@ -80,13 +80,13 @@ jobs:
             latest=false
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.6.1
+        uses: docker/setup-buildx-action@v4.4.1
         with:
           use: true
           platforms: linux/arm64,linux/amd64
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6.8.0
+        uses: docker/build-push-action@v7.4.0
         with:
           context: .
           file: .container/Dockerfile
@@ -96,7 +96,7 @@ jobs:
           platforms: linux/arm64,linux/amd64
 
       - name: Build and Push Chart
-        uses: SneaksAndData/github-actions/build_helm_chart@v0.1.9
+        uses: SneaksAndData/github-actions/build_helm_chart@v0.1.12
         with:
           application: arcane-stream-sqlserver
           app_version: ${{ steps.meta.outputs.version }}
